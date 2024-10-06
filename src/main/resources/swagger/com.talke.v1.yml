@@ -4,19 +4,31 @@ info:
   version: 0.0.1
   description: |-
     Chat App
+    
+    _Get familiar with following terms:_
+    
+    | Talk-E           | Usual Term      |
+    | ---------------- | ----------------|
+    | Talker           | User            |
+    | Buddy            | Friend          |
+    | Talk             | Chat            |
+    | Wave             | Friend Request  |
+    |                  |                 |
+  
+
   contact:
     email: parthabhunia2001@gmail.com
 servers:
-  - url: http://localhost:8082/talke
+  - url: http://localhost:8082/talke/v1
 tags:
-  - name: user
+  - name: User
     description: Operations about user
 
 paths:
   /user:
     post:
       tags:
-        - user
+        - User
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -26,10 +38,23 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/User'
-          application/x-www-form-urlencoded:
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - User
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      requestBody:
+        description: Updated user object
+        content:
+          application/json:
             schema:
               $ref: '#/components/schemas/User'
       responses:
@@ -39,13 +64,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
+
   /user/{username}:
     get:
       tags:
-        - user
+        - User
       summary: Get user by user name
       description: ''
       operationId: getUserByName
@@ -63,7 +86,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-            application/xml:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+
+  /user/{username}/buddies:
+    get:
+      tags:
+        - User
+      summary: Get user's friends
+      description: ''
+      operationId: getBuddiesByName
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
